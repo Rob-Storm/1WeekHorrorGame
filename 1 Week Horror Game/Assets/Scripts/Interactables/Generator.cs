@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Generator : Interactable
@@ -12,10 +13,17 @@ public class Generator : Interactable
 
     public ObjectiveManager manager;
 
+    public static int onGenerators;
+
+    public GameObject[] generatorsInScene;
+
     public GameObject difficulty1;
     public GameObject difficulty2;
     public GameObject difficulty3;
     public GameObject difficulty4;
+
+    public static int[] eventThreshold;
+    public static int eventLevel = 0;
 
     public AudioSource audioSource;
     public AudioClip normClip;
@@ -25,8 +33,10 @@ public class Generator : Interactable
     public HardMode hardMode;
     public void Start()
     {
+        onGenerators = generatorsInScene.Length;
+
         Invoke(nameof(AudioStart), 1);
-        if(hardMode.isEnabled)
+        if(hardMode != null && hardMode.isEnabled)
         {
             difficulty1.SetActive(true);
             difficulty2.SetActive(true);
@@ -55,11 +65,12 @@ public class Generator : Interactable
 
     public override void Interact()
     {
-        if(hardMode.isEnabled && isActive)
+        if(hardMode != null && hardMode.isEnabled && isActive)
         {
             InteractHard();
             Debug.Log("Hardmode is Enabled!");
         }
+
         else if(!hardMode.isEnabled && isActive)
         {
             audioSource.Stop();
@@ -67,41 +78,10 @@ public class Generator : Interactable
             audioSource.PlayOneShot(powerDownclip);
             isActive = false;
             this.gameObject.GetComponent<Renderer>().material = offMaterial;
-            manager.onGenerators--;
-
-            manager.objectiveText.text = $"{manager.onGenerators}/6 Generators Online.";
-
-            if (manager.onGenerators == 5)
-            {
-                difficulty1.SetActive(true);
-                Debug.Log("Batch 1 Spawned");
-            }
-
-            if (manager.onGenerators == 4)
-            {
-                difficulty2.SetActive(true);
-                Debug.Log("Batch 2 Spawned");
-            }
-
-            if (manager.onGenerators == 3)
-            {
-                mainLights.SetActive(false);
-                manager.audioSource.PlayOneShot(lightGenerator);
-                manager.audioSource.PlayOneShot(lightEffect);
-                Debug.Log("Lights should be out");
-                difficulty3.SetActive(true);
-                Debug.Log("Batch 3 Spawned");
-            }
-
-            if (manager.onGenerators == 0)
-            {
-                door.isLocked = false;
-                manager.audioSource.PlayOneShot(finalGenerator);
-                Debug.Log("Door should be unlocked");
-                manager.objectiveText.text = "Office Door is Unlocked.";
-                difficulty4.SetActive(true);
-                Debug.Log("Enemy - SPEED Spawned");
-            }
+            onGenerators--;
+            manager.objectiveText.text = $"{onGenerators}/{generatorsInScene.Length} Generators Online.";
+            Objective(eventLevel);
+            eventLevel++;
         }
 
     }
@@ -113,17 +93,17 @@ public class Generator : Interactable
         audioSource.PlayOneShot(powerDownclip);
         isActive = false;
         this.gameObject.GetComponent<Renderer>().material = offMaterial;
-        manager.onGenerators--;
+        onGenerators--;
 
-        manager.objectiveText.text = $"{manager.onGenerators}/6 Generators Online.";
+        manager.objectiveText.text = $"{onGenerators}/6 Generators Online.";
 
-        if (manager.onGenerators == 2)
+        if (onGenerators == 2)
         {
             difficulty4.SetActive(true);
             Debug.Log("Enemy - SPEED Spawned");
         }
 
-        if (manager.onGenerators == 0)
+        if (onGenerators == 0)
         {
             door.isLocked = false;
             manager.audioSource.PlayOneShot(finalGenerator);
@@ -132,4 +112,60 @@ public class Generator : Interactable
 
         }
     }
+
+    public void Objective(int eventLevel)
+    {
+        switch (eventLevel) 
+        {
+            case 0:
+                if(difficulty1 != null)
+                {
+                    difficulty1.SetActive(true);
+                    Debug.Log("Batch 1 Spawned");
+                }
+                break;
+
+            case 1:
+                if(difficulty2 != null)
+                {
+                    SpawnEnemies(difficulty2);
+                    Debug.Log("Batch 2 Spawned");
+                }
+                break;
+
+            case 2:
+                if (difficulty3 != null)
+                {
+                    difficulty3.SetActive(true);
+                    Debug.Log("Batch 3 Spawned");
+                }
+                manager.audioSource.PlayOneShot(lightGenerator);
+                manager.audioSource.PlayOneShot(lightEffect);
+                break;
+
+            case 6:
+                if (difficulty4 != null)
+                {
+                    difficulty4.SetActive(true);
+                    Debug.Log("Enemy - SPEED Spawned");
+                }
+                door.isLocked = false;
+                manager.audioSource.PlayOneShot(finalGenerator);
+                Debug.Log("Door should be unlocked");
+                manager.objectiveText.text = "Office Door is Unlocked.";
+                break;
+
+            default:
+                Debug.LogWarning($"Event level {eventLevel} is outside Array Length");
+                break;
+        }
+
+        Debug.Log($"event level {eventLevel} has been triggered");
+    }
+
+    void SpawnEnemies(GameObject spawnObject)
+    {
+        spawnObject.SetActive(true);
+    }
+       
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ObjectiveManager : MonoBehaviour
 {
-    [Tooltip("How many generators are in the scene")]
+    [Tooltip("How many generators are in the scene (OBSOLETE)")]
     public int onGenerators = 6;
 
     [Tooltip("A key to the lab that has the exit key")]

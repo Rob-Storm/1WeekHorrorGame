@@ -1,3 +1,5 @@
+using Palmmedia.ReportGenerator.Core;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -5,12 +7,12 @@ using UnityEngine.AI;
 public class Door : Interactable
 {
 
-    [Header("General Stuff")]
+    [Header("References")]
 
     [Tooltip("Where the Door Rotates From")]
     public Transform hinge;
 
-    [Tooltip("A reference to the Objective Manager, used for the generators")]
+    [Tooltip("A reference to the Objective Manager")]
     public ObjectiveManager manager;
 
     [Tooltip("Does the door start open?")]
@@ -95,7 +97,7 @@ public class Door : Interactable
         else
         {
             audioSource.PlayOneShot(lockSound);
-            if(hasMessage && manager.onGenerators == 6)
+            if(hasMessage && Generator.eventLevel == 0)
             {
                 manager.objectiveText.text = objectiveText;
             }
@@ -107,7 +109,7 @@ public class Door : Interactable
     {
         if (isLocked)
         {
-            if (hasMessage && manager.onGenerators == 6 && showMessageOnView)
+            if (hasMessage && Generator.eventLevel == 0 && showMessageOnView)
             {
                 manager.objectiveText.text = objectiveText;
             }
