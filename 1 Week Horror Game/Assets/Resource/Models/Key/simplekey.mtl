@@ -1,0 +1,12 @@
+# Blender 3.5.1 MTL File: 'simplekey.blend'
+# www.blender.org
+
+newmtl Material.001
+Ns 110.103294
+Ka 0.745455 0.745455 0.745455
+Ks 0.000000 0.000000 0.000000
+Ke 0.079351 0.046910 0.010572
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd brassbrush.png
