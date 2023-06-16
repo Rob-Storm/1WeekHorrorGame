@@ -46,5 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnpoints:
   - {fileID: 0}
-  - {fileID: 0}
   objectToSpawn: {fileID: 0}
