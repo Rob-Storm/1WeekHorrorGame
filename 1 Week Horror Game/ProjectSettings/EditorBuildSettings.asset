@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameOver/GameOver.unity
     guid: e13cbe67f5213d344961385847cdc248
+  - enabled: 1
+    path: Assets/Scenes/inferno199-office-level/office1.unity
+    guid: 1ae011d0d27a0714a878efcaafd4946d
   m_configObjects: {}
