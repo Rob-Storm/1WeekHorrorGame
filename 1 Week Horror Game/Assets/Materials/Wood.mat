@@ -51,12 +51,13 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaDstBlend: 0
+    - _CoatMask: 0
     - _DetailAlbedoScale: 0
     - _DetailNormalScale: 0
     - _DetailSmoothnessScale: 0
     - _DstBlend: 0
     - _InvTilingScale: 2
-    - _NormalScale: 1
+    - _NormalScale: 0
     - _StencilRefDepth: 8
     - _StencilRefGBuffer: 10
     - _StencilRefMV: 40
